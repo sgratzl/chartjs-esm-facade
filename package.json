@@ -17,6 +17,7 @@
   },
   "main": "src/index.umd.js",
   "module": "src/index.js",
+  "types": "src/index.d.ts",
   "sideEffects": false,
   "files": [
     "src"
@@ -47,5 +48,8 @@
     "chart.js": {
       "unplugged": true
     }
+  },
+  "dependencies": {
+    "@types/chart.js": "^2.9.23"
   }
 }
