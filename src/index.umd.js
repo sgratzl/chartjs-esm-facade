@@ -9,9 +9,13 @@
 
   ChartNS = ChartNS && Object.prototype.hasOwnProperty.call(ChartNS, 'default') ? ChartNS['default'] : ChartNS;
 
+  // copy all
   Object.assign(exports, ChartNS);
+  // create internal structure
   exports.default = ChartNS;
   exports.Chart = ChartNS;
+  // Animations
+  exports.Animations = ChartNS.animationService;
   // platforms
   Object.assign(exports, ChartNS.platforms);
   // controllers, scales, elements
@@ -28,12 +32,10 @@
     exports[id[0].toUpperCase() + id.slice(1)] = plugin;
   });
 
-  // Animations
-  exports.Animations = ChartNS.animationService;
-
   // flat helpers
   Object.keys(ChartNS.helpers).forEach((helper) => {
     const v = ChartNS.helpers[helper];
+    // core and extra helpers are inlined
     if (typeof v === 'function') {
       exports[helper] = v;
     } else {
