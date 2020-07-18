@@ -36,10 +36,14 @@
   Object.keys(ChartNS.helpers).forEach((helper) => {
     const v = ChartNS.helpers[helper];
     // core and extra helpers are inlined
-    if (typeof v === 'function') {
+    if (typeof v === 'function' && helper[0] !== '_') {
       exports[helper] = v;
     } else {
-      Object.assign(exports, v);
+      Object.keys(v)
+        .filter((d) => d[0] !== '_')
+        .forEach((hi) => {
+          exports[hi] = v[hi];
+        });
     }
   });
 });
