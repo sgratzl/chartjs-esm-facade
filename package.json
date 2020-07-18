@@ -35,6 +35,7 @@
     "clean": "rimraf build *.tgz",
     "watch": "rollup -c -w",
     "lint": "eslint src",
+    "test": "yarn lint",
     "format": "prettier --write samples src package.json *.js README.md",
     "release": "release-it --disable-metrics --npm.skipChecks",
     "release:pre": "release-it --disable-metrics --npm.skipChecks --preRelease=alpha --npm.tag=next"
