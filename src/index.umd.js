@@ -18,21 +18,18 @@
   exports.Animations = ChartNS.animationService;
   // platforms
   Object.assign(exports, ChartNS.platforms);
-  Object.keys(ChartNS.registry.controllers.items).forEach((id) => {
-    const controller = ChartNS.registry.controllers.get(id);
-    exports[id[0].toUpperCase() + id.slice(1) + 'Controller'] = controller;
-  });
-  Object.keys(ChartNS.registry.scales.items).forEach((id) => {
-    const scale = ChartNS.registry.scales.get(id);
-    exports[id[0].toUpperCase() + id.slice(1) + 'Scale'] = scale;
-  });
-  Object.keys(ChartNS.registry.elements.items).forEach((id) => {
-    const element = ChartNS.registry.elements.get(id);
-    exports[id[0].toUpperCase() + id.slice(1)] = element;
-  });
-  Object.keys(ChartNS.registry.plugins.items).forEach((id) => {
-    const plugin = ChartNS.registry.plugins.get(id);
-    exports[id[0].toUpperCase() + id.slice(1)] = plugin;
+  [
+    ['controllers', 'Controller'],
+    ['scales', 'Scale'],
+    ['elements', ''],
+    ['plugins', ''],
+  ].forEach((setup) => {
+    const reg = ChartNS.registry[setup[0]];
+    const suffix = setup[1];
+    Object.keys(reg.items).forEach((id) => {
+      const instance = reg.get(id);
+      exports[id[0].toUpperCase() + id.slice(1) + suffix] = instance;
+    });
   });
 
   // flat helpers
