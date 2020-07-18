@@ -18,15 +18,18 @@
   exports.Animations = ChartNS.animationService;
   // platforms
   Object.assign(exports, ChartNS.platforms);
-  // controllers, scales, elements
-  // use the prototype name as export name
-  [ChartNS.registry.controllers, ChartNS.registry.scales, ChartNS.registry.elements].forEach((typedRegistry) => {
-    Object.keys(typedRegistry.items).forEach((id) => {
-      const classPrototype = typedRegistry.get(id);
-      exports[classPrototype.name] = classPrototype;
-    });
+  Object.keys(ChartNS.registry.controllers.items).forEach((id) => {
+    const controller = ChartNS.registry.controllers.get(id);
+    exports[id[0].toUpperCase() + id.slice(1) + 'Controller'] = controller;
   });
-  // for plugins generate a name from the id
+  Object.keys(ChartNS.registry.scales.items).forEach((id) => {
+    const scale = ChartNS.registry.scales.get(id);
+    exports[id[0].toUpperCase() + id.slice(1) + 'Scale'] = scale;
+  });
+  Object.keys(ChartNS.registry.elements.items).forEach((id) => {
+    const element = ChartNS.registry.elements.get(id);
+    exports[id[0].toUpperCase() + id.slice(1)] = element;
+  });
   Object.keys(ChartNS.registry.plugins.items).forEach((id) => {
     const plugin = ChartNS.registry.plugins.get(id);
     exports[id[0].toUpperCase() + id.slice(1)] = plugin;
