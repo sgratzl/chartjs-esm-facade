@@ -9,7 +9,7 @@ export interface IFullFontSpec {
   style: string;
   weight: string | null;
   strokeStyle: string | null;
-  string: number;
+  string: string;
 }
 
 export function toFont(options: IFontOptions): IFullFontSpec;

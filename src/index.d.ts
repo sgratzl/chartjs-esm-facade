@@ -2,6 +2,7 @@
 
 export type ChartConfiguration = Chart.ChartConfiguration;
 export type ChartData = Chart.ChartData;
+export type ChartDataSets = Chart.ChartDataSets;
 export type ChartOptions = Chart.ChartOptions;
 
 export class TypedRegistry<T> {
@@ -9,6 +10,36 @@ export class TypedRegistry<T> {
   get(id: string): T | undefined;
   unregister(item: IRegistryElement): void;
 }
+
+export class Defaults {
+  readonly color: string;
+  readonly events: ('mousemove' | 'mouseout' | 'click' | 'touchstart' | 'touchmove')[];
+  readonly font: {
+    color: string;
+    family: string;
+    size: number;
+    style: number;
+    lineHeight: number;
+    weight: null | number;
+    lineWidth: number;
+    strokeStyle?: string;
+  };
+  readonly hover: {
+    onHover?: () => void;
+    mode: 'nearest';
+    intersect: boolean;
+  };
+  readonly maintainAspectRatio: boolean;
+  readonly onClick?: () => void;
+  readonly responsive: boolean;
+  readonly showLines: boolean;
+
+  set(scope: string, values: any): any;
+  get(scope: string): any;
+  route(scope: string, name: string, targetScope: string, targetName: string): void;
+}
+
+export const defaults: Defaults;
 
 declare type IRegisterElementLike = IRegistryElement | IRegistryElement[] | { [key: string]: IRegistryElement };
 
@@ -288,6 +319,10 @@ export interface IRegistryElement {
 
 export interface IPlugin {
   id: string;
+
+  beforeEvent?(chart: Chart, event: { x?: number; y?: number; type: string }): boolean | void;
+  beforeUpdate?(chart: Chart): boolean | void;
+  beforeDatasetsDraw?(chart: Chart): boolean | void;
 }
 
 export class Element<T = {}, O = {}> {
@@ -447,9 +482,6 @@ export const Rectangle: IRegistryElement & {
   new (cfg: any): Rectangle;
 };
 
-// plugins
-export interface IPlugin extends IRegistryElement {}
-
 export const Filler: IPlugin;
 export const Legend: IPlugin;
 export const Title: IPlugin;
@@ -510,10 +542,9 @@ export const Ticks: {
   };
 };
 
-export interface Scale extends Element {
+export interface Scale<O = {}> extends Element<{}, O> {
   readonly id: string;
   readonly type: string;
-  readonly options: any;
   readonly ctx: CanvasRenderingContext2D;
   readonly chart: Chart;
   top: number;
@@ -584,10 +615,18 @@ export interface Scale extends Element {
   isFullWidth(): boolean;
 }
 
-export interface CategoryScale extends Scale {}
+export interface ScaleOptions {
+  gridLines: {
+    offsetGridLines: boolean;
+  };
+}
+
+export interface CategoryScaleOptions extends ScaleOptions {}
+
+export interface CategoryScale<O extends CategoryScaleOptions = CategoryScaleOptions> extends Scale<O> {}
 export const CategoryScale: IRegistryElement & {
   prototype: CategoryScale;
-  new (): CategoryScale;
+  new <O extends CategoryScaleOptions = CategoryScaleOptions>(): CategoryScale<O>;
 };
 export interface LinearScale extends Scale {}
 export const LinearScale: IRegistryElement & {
