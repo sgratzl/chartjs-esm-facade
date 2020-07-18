@@ -31,5 +31,13 @@
   // Animations
   exports.Animations = ChartNS.animationService;
 
-  // TODO helpers
+  // flat helpers
+  Object.keys(ChartNS.helpers).forEach((helper) => {
+    const v = ChartNS.helpers[helper];
+    if (typeof v === 'function') {
+      exports[helper] = v;
+    } else {
+      Object.assign(exports, v);
+    }
+  });
 });
