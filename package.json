@@ -1,7 +1,7 @@
 {
   "name": "@sgratzl/chartjs-esm-facade",
   "description": "Chart.js facade that exposed Chart.js in a flat ESM structure in both ESM and UMD cases",
-  "version": "3.0.0-alpha.2",
+  "version": "3.0.0-alpha.0",
   "author": {
     "name": "Samuel Gratzl",
     "email": "samu@sgratzl.com",
