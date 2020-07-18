@@ -1,5 +1,9 @@
 /// <reference types="chart.js" />
 
+export type ChartConfiguration = Chart.ChartConfiguration;
+export type ChartData = Chart.ChartData;
+export type ChartOptions = Chart.ChartOptions;
+
 export class TypedRegistry<T> {
   register(item: IRegistryElement): string;
   get(id: string): T | undefined;
@@ -27,6 +31,8 @@ export class Registry {
   getScale(id: string): Scale | undefined;
 }
 
+export const registry: Registry;
+
 export class Animator {
   listen(chart: Chart, event: Event, cb: any): void;
   add(chart: Chart, items: any): void;
@@ -51,23 +57,26 @@ export class Animations {
   update(target: any, values: any): undefined | boolean;
 }
 
-export declare type UpdateMode = 'resize' | 'reset' | 'none' | 'hide' | 'show' | undefined;
+export declare type UpdateMode = 'resize' | 'reset' | 'none' | 'hide' | 'show' | 'normal' | undefined;
 
-export interface DatasetController {
+export class DatasetController<E extends Element = Element, DSE extends Element = Element> {
+  constructor(chart: Chart, datasetIndex: number);
+
   readonly chart: Chart;
   readonly index: number;
+  readonly _cachedMeta: IChartMeta<E, DSE>;
 
   linkScales(): void;
   getAllParsedValues(scale: Scale): any[];
   getLabelAndValue(index: number): { label: string; value: string };
-  updateElements(elements: Element[], start: number, mode: UpdateMode): void;
+  updateElements(elements: E[], start: number, mode: UpdateMode): void;
   update(mode: UpdateMode): void;
   updateIndex(datasetIndex: number): void;
   getMaxOverflow(): boolean;
   draw(): void;
   reset(): void;
-  getDataset(): Chart.ChartData;
-  getMeta(): IChartMeta;
+  getDataset(): ChartData;
+  getMeta(): IChartMeta<E, DSE>;
   getScaleForId(scaleID: string): Scale | undefined;
   configure(): void;
   initialize(): void;
@@ -77,12 +86,12 @@ export interface DatasetController {
   getStyle(index: number, active: boolean): any;
   resolveDatasetElementOptions(active: boolean): any;
   resolveDataElementOptions(index: number, mode: UpdateMode): any;
-  getSharedOptions(mode: UpdateMode, el: Element, options: any): undefined | { target: any; options: any };
+  getSharedOptions(mode: UpdateMode, el: E, options: any): undefined | { target: any; options: any };
   includeOptions(mode: UpdateMode, sharedOptions: any): boolean;
   updateElement(element, index, properties, mode: UpdateMode): void;
   updateSharedOptions(sharedOptions: any, mode: UpdateMode): void;
-  removeHoverStyle(element: Element, datasetIndex: number, index: number): void;
-  setHoverStyle(element: Element, datasetIndex: number, index: number): void;
+  removeHoverStyle(element: E, datasetIndex: number, index: number): void;
+  setHoverStyle(element: E, datasetIndex: number, index: number): void;
 
   parse(start: number, count: number): void;
   parsePrimitiveData(meta, data, start: number, count: number): any[];
@@ -93,10 +102,6 @@ export interface DatasetController {
   updateRangeFromParsed(range: { min: number; max: number }, scale: Scale, parsed: any[], stack: boolean): void;
   getMinMax(scale: Scale, canStack?: boolean): { min: number; max: number };
 }
-export const DatasetController: {
-  prototype: DatasetController;
-  new (chart: Chart, datasetIndex: number): DatasetController;
-};
 
 export interface BarController extends DatasetController {}
 export const BarController: IRegistryElement & {
@@ -211,27 +216,26 @@ export class PluginService {
   invalidate(): void;
 }
 
+export type ContextType =
+  | string
+  | CanvasRenderingContext2D
+  | HTMLCanvasElement
+  | ArrayLike<CanvasRenderingContext2D | HTMLCanvasElement>;
+
 export declare class Chart {
-  constructor(
-    item:
-      | string
-      | CanvasRenderingContext2D
-      | HTMLCanvasElement
-      | ArrayLike<CanvasRenderingContext2D | HTMLCanvasElement>,
-    config: Chart.ChartConfiguration
-  );
+  constructor(item: ContextType, config: ChartConfiguration);
 
   readonly platform: BasePlatform;
   readonly id: string;
   readonly ctx: CanvasRenderingContext2D;
-  readonly config: Chart.ChartConfiguration;
+  readonly config: ChartConfiguration;
   readonly width: number;
   readonly height: number;
   readonly aspectRatio: number;
-  readonly options: Chart.ChartOptions;
+  readonly options: ChartOptions;
   readonly currentDevicePixelRatio: number;
   readonly chartArea: IChartArea;
-  readonly data: Chart.ChartData; // TODO
+  readonly data: ChartData;
   readonly scales: { [key: string]: Scale };
   readonly scale: Scale | undefined;
   readonly attached: boolean;
@@ -279,19 +283,35 @@ export declare class Chart {
 export interface IRegistryElement {
   id: string;
   defaults?: any;
-  defaultRoutes: { [property: string]: string };
+  defaultRoutes?: { [property: string]: string };
 }
 
 export interface IPlugin {
   id: string;
 }
 
-export class Element {
+export class Element<T = {}, O = {}> {
   readonly x: number;
   readonly y: number;
   readonly active: boolean;
+  readonly options: O;
   tooltipPosition(useFinalPosition?: boolean): IPoint;
   hasValue(): boolean;
+  getProps<P extends keyof T>(props: [P], final?: boolean): Pick<T, P>;
+  getProps<P extends keyof T, P2 extends keyof T>(props: [P, P2], final?: boolean): Pick<T, P | P2>;
+  getProps<P extends keyof T, P2 extends keyof T, P3 extends keyof T>(
+    props: [P, P2, P3],
+    final?: boolean
+  ): Pick<T, P | P2 | P3>;
+  getProps<P extends keyof T, P2 extends keyof T, P3 extends keyof T, P4 extends keyof T>(
+    props: [P, P2, P3, P4],
+    final?: boolean
+  ): Pick<T, P | P2 | P3 | P4>;
+  getProps<P extends keyof T, P2 extends keyof T, P3 extends keyof T, P4 extends keyof T, P5 extends keyof T>(
+    props: [P, P2, P3, P4, P5],
+    final?: boolean
+  ): Pick<T, P | P2 | P3 | P4 | P5>;
+  getProps(props: (keyof T)[], final?: boolean): T;
 }
 
 export interface IPoint {
@@ -299,14 +319,13 @@ export interface IPoint {
   y: number;
 }
 
-export interface VisualElement<T = {}> extends Element {
+export interface IVisualElement {
   draw(ctx: CanvasRenderingContext2D): void;
   inRange(mouseX: number, mouseY: number, useFinalPosition?: boolean): boolean;
   inXRange(mouseX: number, useFinalPosition?: boolean): boolean;
   inYRange(mouseY: number, useFinalPosition?: boolean): boolean;
   getCenterPoint(useFinalPosition?: boolean): IPoint;
-  getRange(axis: 'x' | 'y'): number;
-  getProps(props: (keyof T)[], final?: boolean): Partial<T>;
+  getRange?(axis: 'x' | 'y'): number;
 }
 
 export interface ICommonOptions {
@@ -337,29 +356,31 @@ export interface ArcProps {
   outerRadius: number;
   circumference: number;
 }
-export interface Arc<T extends ArcProps = ArcProps> extends VisualElement<T> {
-  readonly options: {
-    borderAlign: 'center';
-  } & ICommonOptions;
+export interface ArcOptions extends ICommonOptions {
+  borderAlign: 'center';
 }
+export interface Arc<T extends ArcProps = ArcProps, O extends ArcOptions = ArcOptions>
+  extends Element<T, O>,
+    IVisualElement {}
 export interface Arc extends IRegistryElement {
   prototype: Arc;
   new (cfg: any): Arc;
 }
 
 export interface LineProps {}
-export interface Line<T extends LineProps = LineProps> extends VisualElement<T> {
-  readonly options: {
-    borderCapStyle: 'butt' | 'round' | 'square';
-    borderDash: number[];
-    borderDashOffset: number;
-    borderJoinStyle: 'bevel' | 'round' | 'miter';
-    capBezierPoints: boolean;
-    fill: boolean;
-    tension: number;
-    stepped: 'before' | 'after' | 'middle' | boolean;
-  } & ICommonOptions;
-
+export interface LineOptions extends ICommonOptions {
+  borderCapStyle: 'butt' | 'round' | 'square';
+  borderDash: number[];
+  borderDashOffset: number;
+  borderJoinStyle: 'bevel' | 'round' | 'miter';
+  capBezierPoints: boolean;
+  fill: boolean;
+  tension: number;
+  stepped: 'before' | 'after' | 'middle' | boolean;
+}
+export interface Line<T extends LineProps = LineProps, O extends LineOptions = LineOptions>
+  extends Element<T, O>,
+    IVisualElement {
   updateControlPoints(chartArea: IChartArea): void;
   points: IPoint[];
   readonly segments: ISegment[];
@@ -378,27 +399,29 @@ export interface PointProps {
   x: number;
   y: number;
 }
-export interface Point<T extends PointProps = PointProps> extends VisualElement<T> {
+export interface PointOptions extends ICommonOptions {
+  radius: number;
+  hitRadius: number;
+  hoverRadius: number;
+  hoverBorderWidth: number;
+  pointStyle:
+    | 'circle'
+    | 'cross'
+    | 'crossRot'
+    | 'dash'
+    | 'line'
+    | 'rect'
+    | 'rectRounded'
+    | 'rectRot'
+    | 'star'
+    | 'triangle'
+    | HTMLImageElement
+    | HTMLCanvasElement;
+}
+export interface Point<T extends PointProps = PointProps, O extends PointOptions = PointOptions>
+  extends Element<T, O>,
+    IVisualElement {
   readonly skip: boolean;
-  readonly options: {
-    radius: number;
-    hitRadius: number;
-    hoverRadius: number;
-    hoverBorderWidth: number;
-    pointStyle:
-      | 'circle'
-      | 'cross'
-      | 'crossRot'
-      | 'dash'
-      | 'line'
-      | 'rect'
-      | 'rectRounded'
-      | 'rectRot'
-      | 'star'
-      | 'triangle'
-      | HTMLImageElement
-      | HTMLCanvasElement;
-  } & ICommonOptions;
 }
 export interface Point extends IRegistryElement {
   prototype: Point;
@@ -413,11 +436,12 @@ export interface RectangleProps {
   width: number;
   height: number;
 }
-export interface Rectangle<T extends RectangleProps = RectangleProps> extends VisualElement<T> {
-  options: {
-    borderSkipped: 'start';
-  } & ICommonOptions;
+export interface RectangleOptions extends ICommonOptions {
+  borderSkipped: 'start';
 }
+export interface Rectangle<T extends RectangleProps = RectangleProps, O extends RectangleOptions = RectangleOptions>
+  extends Element<T, O>,
+    IVisualElement {}
 export const Rectangle: IRegistryElement & {
   prototype: Rectangle;
   new (cfg: any): Rectangle;
@@ -429,11 +453,22 @@ export interface IPlugin extends IRegistryElement {}
 export const Filler: IPlugin;
 export const Legend: IPlugin;
 export const Title: IPlugin;
+
+export interface ITooltipItem {
+  chart: Chart;
+  datasetIndex: number;
+  element: Element;
+  dataIndex: number;
+  dataPoint: any;
+  label: string;
+  formattedValue: string;
+}
+
 export const Tooltip: IPlugin & {
   readonly positioners: { [key: string]: (items: readonly Element[], eventPosition: IPoint) => IPoint };
 };
 
-export interface IChartMeta {
+export interface IChartMeta<E extends Element = Element, DSE extends Element = Element> {
   type: string;
   controller: DatasetController;
   order: number;
@@ -446,8 +481,8 @@ export interface IChartMeta {
 
   indexAxis: 'x' | 'y';
 
-  data: Element[];
-  dataset?: Element;
+  data: E[];
+  dataset?: DSE;
 
   hidden: boolean;
 
