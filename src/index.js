@@ -8,7 +8,7 @@ export {
   clone,
   each,
   isArray,
-  isNumberFinite as isFinite,
+  isFinite,
   isNullOrUndef,
   isObject,
   merge,
