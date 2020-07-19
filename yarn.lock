@@ -198,6 +198,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@sgratzl/chartjs-esm-facade@workspace:."
   dependencies:
+    "@types/chart.js": ^2.9.23
     "@yarnpkg/pnpify": ^2.0.0-rc.22
     chart.js: ^3.0.0-alpha.2
     eslint: ^7.0.0
@@ -255,6 +256,15 @@ __metadata:
     "@types/node": "*"
     "@types/responselike": "*"
   checksum: 3dae802a0808573986c56b92bf16cd031a5b648b6c893d20c7ef6bfda3fc72a2107c7978697d2b27b14febc597162d6959985eeb5befc307a9f9f3c5081d4905
+  languageName: node
+  linkType: hard
+
+"@types/chart.js@npm:^2.9.23":
+  version: 2.9.23
+  resolution: "@types/chart.js@npm:2.9.23"
+  dependencies:
+    moment: ^2.10.2
+  checksum: 6ba0c6fc96be0cf762ef9c11a227b50933b34dc681d04cb463ee7130cb72116670cc53c180dc38c6307398aea83a439ec599f82c9ae4a1d78e5cd5c15a6d36c9
   languageName: node
   linkType: hard
 
@@ -2406,6 +2416,13 @@ __metadata:
   bin:
     mkdirp: bin/cmd.js
   checksum: 9dd9792e891927b14ca02226dbe1daeb717b9517a001620d5e2658bbc72c5e4f06887b6cbcbb60595fa5a56e701073cf250f1ed69c1988a6b89faf9fd6a4d049
+  languageName: node
+  linkType: hard
+
+"moment@npm:^2.10.2":
+  version: 2.27.0
+  resolution: "moment@npm:2.27.0"
+  checksum: 72d9a7d8dba59e3d538440cdc0b59fa895b123361e370be231896478aaf157a484355ce32bd8daf6f731d6d1636d3a67ecb67531e536e093ca18b43e0cbae194
   languageName: node
   linkType: hard
 
