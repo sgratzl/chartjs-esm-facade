@@ -1,5 +1,5 @@
 export * from './canvas';
-export * from './collection';
+// export * from './collection';
 export * from './color';
 export * from './core';
 export * from './curve';

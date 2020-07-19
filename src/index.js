@@ -1,7 +1,8 @@
 export * from 'chart.js';
 
 export { clear, clipArea, drawPoint, toFontString, unclipArea } from 'chart.js/helpers/canvas';
-export { listenArrayEvents, unlistenArrayEvents } from 'chart.js/helpers/collection';
+// not part of the UMD build
+// export { listenArrayEvents, unlistenArrayEvents } from 'chart.js/helpers/collection';
 export { color, getHoverColor } from 'chart.js/helpers/color';
 export {
   callback,
