@@ -10,7 +10,7 @@ It is an application of the [Facade Design Pattern](https://en.wikipedia.org/wik
 ## Install
 
 ```bash
-npm install --save chart.js@next chartjs-esm-facade@next
+npm install --save chart.js@next @sgratzl/chartjs-esm-facade@next
 ```
 
 ## Usage
