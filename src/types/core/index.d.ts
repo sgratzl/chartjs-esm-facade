@@ -10,14 +10,7 @@ import {
   TimeUnit,
   IEvent,
 } from './interfaces';
-import {
-  IChartDataset,
-  IChartData,
-  IChartOptions,
-  IChartConfiguration,
-  ConfigurationOptions,
-  ConfigurationData,
-} from '../interfaces';
+import { IChartDataset, IChartConfiguration, ConfigurationOptions, ConfigurationData } from '../interfaces';
 
 export interface IDateAdapter {
   /**

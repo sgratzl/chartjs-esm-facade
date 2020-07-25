@@ -193,6 +193,20 @@ export interface IDoughnutControllerDatasetOptions
   weight: number;
 }
 
+export interface IDoughnutAnimationOptions {
+  /**
+   * 	If true, the chart will animate in with a rotation animation. This property is in the options.animation object.
+   * @default true
+   */
+  animateRotate: boolean;
+
+  /**
+   * If true, will animate scaling the chart from the center outwards.
+   * @default false
+   */
+  animateScale: boolean;
+}
+
 export interface IDoughnutControllerChartOptions {
   /**
    * The percentage of the chart that is cut out of the middle. (50 - for doughnut, 0 - for pie)
@@ -211,20 +225,8 @@ export interface IDoughnutControllerChartOptions {
    * @default 2 * Math.PI
    */
   circumference: number;
-}
 
-export interface IDoughnutAnimationOptions {
-  /**
-   * 	If true, the chart will animate in with a rotation animation. This property is in the options.animation object.
-   * @default true
-   */
-  animateRotate: boolean;
-
-  /**
-   * If true, will animate scaling the chart from the center outwards.
-   * @default false
-   */
-  animateScale: boolean;
+  animation: IDoughnutAnimationOptions;
 }
 
 export type IDoughnutDataPoint = number;
@@ -265,6 +267,8 @@ export interface IPolarAreaControllerDatasetOptions extends IDoughnutControllerD
   angle: number;
 }
 
+export type IPolarAreaAnimationOptions = IDoughnutAnimationOptions;
+
 export interface IPolarAreaControllerChartOptions {
   /**
    * Starting angle to draw arcs for the first item in a dataset. In degrees, 0 is at top.
@@ -275,9 +279,9 @@ export interface IPolarAreaControllerChartOptions {
   scales: {
     r: IRadialLinearScaleType;
   };
-}
 
-export type IPolarAreaAnimationOptions = IDoughnutAnimationOptions;
+  animation: IPolarAreaAnimationOptions;
+}
 
 export interface PolarAreaController extends DoughnutController {
   countVisibleElements(): number;
