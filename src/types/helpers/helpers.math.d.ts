@@ -5,6 +5,9 @@ export function almostWhole(x: number, epsilon: number): number;
 export function sign(x: number): number;
 export function toRadians(degrees: number): number;
 export function toDegrees(radians: number): number;
+/**
+ * Gets the angle from vertical upright to the point about a centre.
+ */
 export function getAngleFromPoint(
   centrePoint: { x: number; y: number },
   anglePoint: { x: number; y: number }

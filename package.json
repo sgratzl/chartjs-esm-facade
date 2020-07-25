@@ -17,7 +17,7 @@
   },
   "main": "src/index.umd.js",
   "module": "src/index.js",
-  "types": "src/index.d.ts",
+  "types": "src/types/index.d.ts",
   "sideEffects": false,
   "files": [
     "src"
@@ -40,7 +40,7 @@
     "watch": "rollup -c -w",
     "lint": "eslint src",
     "test": "yarn lint",
-    "format": "prettier --write samples src package.json *.js README.md",
+    "format": "prettier --write samples src package.json README.md",
     "release": "release-it --disable-metrics --npm.skipChecks",
     "release:pre": "release-it --disable-metrics --npm.skipChecks --preRelease=alpha --npm.tag=next"
   },
