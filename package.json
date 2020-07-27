@@ -48,8 +48,5 @@
     "chart.js": {
       "unplugged": true
     }
-  },
-  "dependencies": {
-    "@types/chart.js": "^2.9.23"
   }
 }
