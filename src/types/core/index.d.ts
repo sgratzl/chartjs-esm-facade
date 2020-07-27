@@ -1043,6 +1043,10 @@ export interface Scale<O extends IScaleOptions = IScaleOptions> extends Element<
   isHorizontal(): boolean;
   isFullWidth(): boolean;
 }
+export const Scale: {
+  prototype: Scale;
+  new <O extends IScaleOptions = IScaleOptions>(): Scale<O>;
+};
 
 export interface IScriptAbleScaleContext {
   chart: Chart;
