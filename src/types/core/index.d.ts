@@ -312,7 +312,7 @@ export const Chart: {
   unregister(...items: IChartComponentLike[]): void;
 };
 
-export type UpdateMode = 'resize' | 'reset' | 'none' | 'hide' | 'show' | 'normal' | undefined;
+export type UpdateMode = 'resize' | 'reset' | 'none' | 'hide' | 'show' | 'normal' | 'active' | undefined;
 
 export class DatasetController<E extends Element = Element, DSE extends Element = Element> {
   constructor(chart: Chart, datasetIndex: number);
