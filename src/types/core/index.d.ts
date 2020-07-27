@@ -1045,7 +1045,7 @@ export interface Scale<O extends IScaleOptions = IScaleOptions> extends Element<
 }
 export const Scale: {
   prototype: Scale;
-  new <O extends IScaleOptions = IScaleOptions>(): Scale<O>;
+  new <O extends IScaleOptions = IScaleOptions>(cfg: any): Scale<O>;
 };
 
 export interface IScriptAbleScaleContext {
