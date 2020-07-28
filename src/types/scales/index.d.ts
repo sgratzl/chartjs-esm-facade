@@ -493,12 +493,6 @@ export interface ITimeSeriesScaleType extends DeepPartial<ITimeScaleOptions> {
 
 export interface IScaleChartOptions {
   scales: {
-    [key: string]:
-      | ILinearScaleType
-      | ILogarithmicScaleType
-      | ICategoryScaleType
-      | IRadialLinearScaleType
-      | ITimeScaleType
-      | ITimeSeriesScaleType;
+    [key: string]: { type: string } & DeepPartial<IScaleOptions>;
   };
 }
